@@ -1,6 +1,3 @@
-"""
-@author: Vimal Venugopal
-"""
 import random
 
 class distributions:

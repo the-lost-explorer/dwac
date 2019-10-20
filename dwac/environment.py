@@ -36,8 +36,8 @@ while(n>0):
    clients.append(client.getpeername()[1])
 
    # Send some messages back to client
-   client.send('Hey'.encode('utf-8'))
-   client.send("Exit".encode('utf-8'))
+   client.send('TEST'.encode('utf-8'))
+   client.send("CLOSE".encode('utf-8'))
    
    n-=1
 

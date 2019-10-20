@@ -1,6 +1,9 @@
 # Importing the socket module
 import socket
 
+# Importing the devices class
+from devices import device
+
 # Create a socket object 
 sock = socket.socket()          
   
@@ -21,5 +24,6 @@ while(True):
     # Receive data from the server 
     data = sock.recv(1024).decode('utf-8')
     print(data)
-    if(data=='Exit'):
+    if(data=='')
+    if(data=='CLOSE'):
         break
