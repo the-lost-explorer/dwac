@@ -1,6 +1,6 @@
 {
-    "python.pythonPath": "C:\\Python36\\python.exe",
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true,
-    "python.linting.pydocstyleEnabled": false
+    "python.pythonPath": "dwac/dwacenv/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.pydocstyleEnabled": true,
+    "python.linting.enabled": true
 }

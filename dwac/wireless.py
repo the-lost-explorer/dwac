@@ -1,5 +1,5 @@
 """@author Vimal Venugopal."""
-class environment:  
+class wireless:  
     """Class to realize the wireless environment."""
 
     def __init__(self):
