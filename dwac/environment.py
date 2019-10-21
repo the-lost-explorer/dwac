@@ -1,6 +1,12 @@
 # Importing the socket module
-import socket                
-  
+import socket,json                
+
+# Import the wireless module
+from wireless import environment
+
+# Create environment object
+wireless_environment = environment()
+
 # Create a socket object 
 sock = socket.socket()          
   
@@ -19,26 +25,28 @@ print("Socket is currently listening")
 clients = []
 
 # Just to limit stuff
-n = 5
+n = 3
 
 
 while(n>0): 
   
-   # Establish connection with client. 
+   # Establish connection with client 
    client, addr = sock.accept()      
-   print('Got connection from', addr[0])
+   print('DEBUG : Got connection from', addr)
 
-   # Receive data from client
-   data = client.recv(1024).decode('utf-8')
-   print(data)
-
-   # Add client to client list
-   clients.append(client.getpeername()[1])
+   # Receive peer name from client
+   peer_name = client.recv(1024).decode('utf-8')
+   print("DEBUG : Peer name : %s" %peer_name)
 
    # Send some messages back to client
-   client.send('TEST'.encode('utf-8'))
+   client.send('SEND_DEVICE_INFO'.encode('utf-8'))
+   
+   # Receive device data from client
+   device_data = json.loads(client.recv(1024).decode('utf-8'))
+   wireless_environment.collection_of_nodes[peer_name] = device_data
+
    client.send("CLOSE".encode('utf-8'))
    
    n-=1
 
-print(clients)
+print(wireless_environment.collection_of_nodes)

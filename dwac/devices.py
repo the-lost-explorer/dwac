@@ -33,7 +33,7 @@ class device:
         return(info_dict)
     
     @staticmethod
-    def get_dummy_vals():
+    def get_dummy_vals(json_response=True):
         """
         static method to return a list of dummy values, following the specified distribution
         """
@@ -43,4 +43,7 @@ class device:
                 distributions.custom_30_70(),
                 random.randint(50,400),
                 random.randint(800,2400))
-        return(dummy.get_info(True))
+        return(dummy.get_info(json_response))
+
+    def update_device_info(self):
+        pass
