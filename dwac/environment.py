@@ -10,6 +10,9 @@ wireless_environment = wireless()
 # Master collection of nodes
 node_collection = {}
 
+# Node priority list
+node_priority_dict = {}
+
 #Device params
 MAX_BATTERY = 100
 MAX_PROCESSOR = 1024
@@ -47,6 +50,8 @@ def handle_client(client):
             # receive the updated values and store them with same id
             request = json.loads(client.recv(255).decode('utf-8'))
             node_collection[request['id']] = request
+            node_priority_dict = prioritise_devices(node_collection)
+            print("NODE PRIORITY DICTIONARY: ", node_priority_dict)
             # return a success message
             response = 'Device info updated'
             client.send(response.encode('utf-8'))
@@ -60,27 +65,36 @@ def handle_client(client):
       client.close()
 
 def prioritise_devices(devices):
-    left_tree = []
-    right_tree = []
+   '''
+   Sorts devices according to priority and generates a dictionary of priorities.
+   '''
+   device_keys = list(devices.keys())
+   device_values = list(devices.values())
 
-    # Sort according to charging
-    for device in devices:
-        if int(device['battery']) > (0.2*MAX_BATTERY) or device['charging'] == 1:
-            left_tree.append(device)
-        else:
-            right_tree.append(device)
+   for i in range(len(device_keys)):
+      device_values[i]['id'] =  device_keys[i]
 
-    # Sort according to processing speed and memory
-    left_tree = sorted(left_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
-    right_tree = sorted(right_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
+   left_tree = []
+   right_tree = []
 
-    combined_tree = left_tree + right_tree
-    # Dictonary of priority
-    priority_dict = {}
-    for i in range(len(combined_tree)):
-        priority_dict[i+1] = combined_tree[i]
+   # Sort according to charging
+   for device in device_values:
+      if int(device['battery']) > (0.5*MAX_BATTERY) or device['charging'] == 1:
+         left_tree.append(device)
+      else:
+         right_tree.append(device)
 
-    return priority_dict
+   # Sort according to processing speed and memory
+   left_tree = sorted(left_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
+   right_tree = sorted(right_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
+
+   combined_tree = left_tree + right_tree
+   # Dictonary of priority
+   priority_dict = {}
+   for i in range(len(combined_tree)):
+      priority_dict[i+1] = combined_tree[i]
+
+   return priority_dict
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('localhost', 15558))

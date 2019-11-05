@@ -3,7 +3,7 @@ from distributions import distributions
 
 class device:
     def __init__(self, ID, status, battery, charging,
-                 free_memory, processor_speed):
+                 free_memory, processor_speed, priority):
         """
         id - uniquely identify a device (Android has Android ID)
         status - whether user is currently using it right now (0/1)
@@ -18,6 +18,7 @@ class device:
         self.charging = charging
         self.free_memory = free_memory
         self.processor_speed = processor_speed
+        self.priority = 1
 
     def get_info(self, json_response=False):
         """
@@ -42,5 +43,5 @@ class device:
                 random.randint(0,100),
                 1-distributions.custom_30_70(),
                 random.randint(0,1024),
-                random.randint(0,1024))
+                random.randint(0,1024),1)
         return(dummy.get_info(json_response))
