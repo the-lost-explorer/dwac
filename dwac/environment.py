@@ -38,12 +38,24 @@ def handle_client(client):
       while(True):
          request = client.recv(255).decode('utf-8')
          print("MAIN LOOP:",request)
+
          if(request.split()[0]=='EXIT'):
             del node_collection[int(request.split()[1])]
             break
+         
+         elif(request.split()[0]=='UPDATE'):
+            # receive the updated values and store them with same id
+            request = json.loads(client.recv(255).decode('utf-8'))
+            node_collection[request['id']] = request
+            # return a success message
+            response = 'Device info updated'
+            client.send(response.encode('utf-8'))
+         
          else:
             pass
+         
          print(node_collection)
+
    except KeyboardInterrupt:
       client.close()
 
