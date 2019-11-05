@@ -40,7 +40,9 @@ def handle_client(client):
    try:
       while(True):
          request = client.recv(255).decode('utf-8')
+         print("-"*40)
          print("MAIN LOOP:",request)
+         print("-"*40)
 
          if(request.split()[0]=='EXIT'):
             del node_collection[int(request.split()[1])]

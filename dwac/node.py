@@ -53,8 +53,6 @@ try:
         response = server.recv(255).decode('utf-8')
         print(response)
 
-        
-
 except KeyboardInterrupt:
     message = "EXIT "+str(current_device['id'])
     server.send(message.encode('utf-8'))
