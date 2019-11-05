@@ -4,6 +4,9 @@ import socket, json, threading, subprocess
 # Import the wireless module
 from wireless import wireless
 
+# Import the tasks module
+from task import tasks
+
 # Create environment object 
 wireless_environment = wireless()
 
@@ -37,10 +40,16 @@ def handle_client(client):
    '''
    Main loop here
    '''
+
+   update_iter = 0
+
+
    try:
       while(True):
+   
          request = client.recv(255).decode('utf-8')
          print("-"*40)
+         update_iter += 1
          print("MAIN LOOP:",request)
          print("-"*40)
 
@@ -48,6 +57,15 @@ def handle_client(client):
             del node_collection[int(request.split()[1])]
             break
          
+         elif(update_iter>4):
+            print("\nSub task done\n")
+            del node_collection[int(request.split()[1])]
+
+            if(node_collection=={}):
+               print("Final result\n")
+               tasks.count_words(tasks.test_string)
+            raise KeyboardInterrupt
+
          elif(request.split()[0]=='UPDATE'):
             # receive the updated values and store them with same id
             request = json.loads(client.recv(255).decode('utf-8'))
