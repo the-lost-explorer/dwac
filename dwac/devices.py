@@ -9,8 +9,8 @@ class device:
         status - whether user is currently using it right now (0/1)
         battery - battery percentage (0 to 100)
         charging - whether the device is being charged right now (0/1)
-        free_memory - RAM available in MB (variable)
-        processor_speed - processor speed in MHz (variable)
+        free_memory - RAM available in MB (int, max: 1024)
+        processor_speed - processor speed in MHz (int, max: 1024)
         """
         self.id = ID
         self.status = status
@@ -41,6 +41,6 @@ class device:
                 distributions.custom_30_70(),
                 random.randint(0,100),
                 1-distributions.custom_30_70(),
-                random.randint(50,400),
-                random.randint(800,2400))
+                random.randint(0,1024),
+                random.randint(0,1024))
         return(dummy.get_info(json_response))

@@ -10,6 +10,10 @@ wireless_environment = wireless()
 # Master collection of nodes
 node_collection = {}
 
+#Device params
+MAX_BATTERY = 100
+MAX_PROCESSOR = 1024
+MAX_MEMORY = 1024
 
 def handle_client(client):
    '''@params: client
@@ -43,6 +47,28 @@ def handle_client(client):
    except KeyboardInterrupt:
       client.close()
 
+def prioritise_devices(devices):
+    left_tree = []
+    right_tree = []
+
+    # Sort according to charging
+    for device in devices:
+        if int(device['battery']) > (0.2*MAX_BATTERY) or device['charging'] == 1:
+            left_tree.append(device)
+        else:
+            right_tree.append(device)
+
+    # Sort according to processing speed and memory
+    left_tree = sorted(left_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
+    right_tree = sorted(right_tree, key = lambda i: i['processor_speed']+i['free_memory'], reverse = True)
+
+    combined_tree = left_tree + right_tree
+    # Dictonary of priority
+    priority_dict = {}
+    for i in range(len(combined_tree)):
+        priority_dict[i+1] = combined_tree[i]
+
+    return priority_dict
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('localhost', 15558))
