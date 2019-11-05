@@ -1,13 +1,14 @@
-# Importing the socket module
-import socket
-import json
-import threading
-import subprocess
+# Import
+import socket, json, threading, subprocess
+
 # Import the wireless module
 from wireless import wireless
 
 # Create environment object 
 wireless_environment = wireless()
+
+# Master collection of nodes
+node_collection = {}
 
 
 def handle_client(client):
@@ -19,18 +20,28 @@ def handle_client(client):
    '''
 
    request = json.loads(client.recv(255).decode('utf8'))
-   print(request, type(request))
+   node_collection[request['id']] = request
+
+   print(node_collection)
+
    response = 'Your device detected in the wireless medium.'
    client.send(response.encode('utf8'))
    
    '''
    Main loop here
    '''
-   while(True):
-      pass
-   
-   
-   client.close()
+   try:
+      while(True):
+         request = client.recv(255).decode('utf-8')
+         print("MAIN LOOP:",request)
+         if(request.split()[0]=='EXIT'):
+            del node_collection[int(request.split()[1])]
+            break
+         else:
+            pass
+         print(node_collection)
+   except KeyboardInterrupt:
+      client.close()
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,4 +53,4 @@ try:
         client, _ = server.accept()
         threading.Thread(target=handle_client, args=(client,)).start()
 except KeyboardInterrupt:
-    server.close()
+   server.close()

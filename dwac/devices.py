@@ -40,10 +40,7 @@ class device:
         dummy = device(random.randint(0,1000),
                 distributions.custom_30_70(),
                 random.randint(0,100),
-                distributions.custom_30_70(),
+                1-distributions.custom_30_70(),
                 random.randint(50,400),
                 random.randint(800,2400))
         return(dummy.get_info(json_response))
-
-    def update_device_info(self):
-        pass
